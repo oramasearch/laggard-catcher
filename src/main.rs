@@ -73,6 +73,8 @@ impl Deref for DurationFromClap {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    let _ = tracing_subscriber::fmt::try_init();
+
     let cli = Cli::parse();
 
     let environment_builder = Environment::builder();
@@ -163,9 +165,10 @@ async fn ensure_stream_is_created(environment: &Environment, stream_name: &str) 
         Ok(_) => {
             println!("Stream {} created", stream_name);
         }
-        Err(StreamCreateError::Create { status, .. })
-            if status == ResponseCode::StreamAlreadyExists =>
-        {
+        Err(StreamCreateError::Create {
+            status: ResponseCode::StreamAlreadyExists,
+            ..
+        }) => {
             println!("Stream {} already exists", stream_name);
         }
         Err(e) => {

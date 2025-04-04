@@ -45,6 +45,7 @@ impl Bumper {
             .await
             .context("Failed to create producer")?;
 
+        println!("Waiting for messages...");
         while let Some(Ok(delivery)) = consumer.next().await {
             println!("Received message");
             let message = delivery.message();

@@ -102,6 +102,7 @@ impl Catcher {
                 .expect("Failed to start server");
         });
 
+        println!("Waiting for messages...");
         let location_application_property_name = &self.location_application_property_name;
         while let Some(Ok(delivery)) = consumer.next().await {
             println!("Received message");
@@ -148,6 +149,7 @@ impl Catcher {
                 "value" => app_props_value.to_string(),
             )
             .record(diff_in_sec);
+            println!("Delay: {} sec", diff_in_sec);
         }
         Ok(())
     }
